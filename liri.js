@@ -44,24 +44,26 @@ switch (userRequest) {
 
 //my-tweets function
 function myTweets() {
-    console.log("tweet tweet");
 
-    var client = new Twitter({
+    var twitter = new Twitter({
         consumer_key: keys.twitterKeys.consumer_key,
         consumer_secret: keys.twitterKeys.consumer_secret,
         access_token_key: keys.twitterKeys.access_token_key,
         access_token_secret: keys.twitterKeys.access_token_secret
     });
 
-    var params = {screen_name: "nodejs"};
+    var params = {screen_name: "CodeGameLinks"};
 
-    client.get("statuses/user_timeline", params, function (error, tweets, response) {
+    twitter.get("statuses/user_timeline", params, function (error, tweets, response) {
         if (error) {
             console.log(error);
         }
         if (!error) {
-            console.log(tweets);
-            //WANTED: Display last 20 tweets and when they were posted in the terminal
+            for (var i = 0; i < tweets.length && i <= 20; i++){
+                console.log("***************************************************");
+                console.log(tweets[i].text);
+                console.log("Tweet created: " + tweets[i].created_at);
+            }
         }
     })
 }
