@@ -14,5 +14,5 @@ These NPMs are included in the package.json file. Simply navigate to the liri-no
 LIRI takes in user requests and returns information based on them. Simply type in your terminal `node liri.js` while inside the liri-node-app in the terminal followed by your command. For example `node liri.js my-tweets`
 * my-twitter : returns the last 20 tweets from a personal twitter account and the time they were posted
 * spotify-this-song : returns information for a song that the user asks for `node liri.js spotify-this-song [SONG NAME]`
-* movie-this :
-* do-what-it-says :
+* movie-this : returns information for a movie the user asks for `node liri.js movie-this [MOVIE NAME]`
+* do-what-it-says : returns information about a random song or movie from the random.txt list `node liri.js do-what-it-says`
