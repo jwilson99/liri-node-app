@@ -24,10 +24,10 @@ for (var i = 3; i < process.argv.length; i++) {
 //if the user doesn't specify a song, a default song is returned
 var song = "";
 if (process.argv.length < 4 && process.argv[2] !== "do-what-it-says") {
-    var song = "The Sign Ace of Base";
+    song = "The Sign Ace of Base";
 }
 else {
-    var song = userInput;
+    song = userInput;
 }
 
 //if the user doesn't specify a movie, a default is set
