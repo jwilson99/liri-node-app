@@ -116,11 +116,20 @@ function movieThis() {
             return console.log("error: " + error);
         }
 
+        console.log(JSON.parse(body));
+        var rottenTomatoes = "NA";
+
+        for (var i = 0; i < JSON.parse(body).Ratings.length; i++){
+            if (JSON.parse(body).Ratings[i].Source === "Rotten Tomatoes"){
+                rottenTomatoes = JSON.parse(body).Ratings[i].Value;
+            }
+        }
+
         console.log("***************************************************");
         console.log("Movie Title: " + JSON.parse(body).Title);
         console.log("Release Year: " + JSON.parse(body).Year);
         console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-        console.log("Rotten Tomatoes Rating: ");
+        console.log("Rotten Tomatoes Rating: " + rottenTomatoes);
         console.log("Country: " + JSON.parse(body).Country);
         console.log("Language: " + JSON.parse(body).Language);
         console.log("***************************************************");
@@ -154,7 +163,7 @@ function doTheThing() {
             i += 2;
         }
 
-        //uses a random number to select a command
+        //uses a random number to select a command and its corresponding query
         var randomNumber = Math.round(Math.random() * (commandArr.length));
 
         var randomCommand = commandArr[randomNumber];
