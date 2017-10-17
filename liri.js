@@ -4,22 +4,43 @@ var fs = require("fs");
 //get exported data from keys.js
 var keys = require("./keys.js");
 
-//for twitter api, and spotify api
+//for twitter api NPM, request NPM, and spotify api NPM
 var Twitter = require("twitter");
 var Spotify = require("node-spotify-api");
+var Request = require("request");
 
 //takes data from the terminal
 var userRequest = process.argv[2];
-var userInput = process.argv[3];
+var userInput = "";
+for (var i = 3; i < process.argv.length; i++) {
+    userInput = userInput + " " + process.argv[i];
+}
+
+var userInputMovie = "";
+for (var i = 3; i < process.argv.length; i++) {
+    userInputMovie = userInputMovie + process.argv[i] + "+";
+}
 
 //if the user doesn't specify a song, a default song is returned
 var song = "";
-if (process.argv.length < 4) {
+if (process.argv.length < 4 && process.argv[2] !== "do-what-it-says") {
     var song = "The Sign Ace of Base";
 }
 else {
     var song = userInput;
 }
+
+//if the user doesn't specify a movie, a default is set
+var movie = "";
+if (process.argv.length < 4 & process.argv[2] !== "do-what-it-says") {
+    movie = "mr+nobody";
+}
+else {
+    movie = userInputMovie;
+}
+
+//OMDB api request URL
+var omdbURL = "http://www.omdbapi.com/?apikey=" + keys.omdbKeys.omdb_key + "&t=" + movie;
 
 //takes in user input to determine which function to run
 switch (userRequest) {
@@ -70,7 +91,6 @@ function myTweets() {
 
 //spotify-this-song function
 function spotifyThis() {
-    console.log("La-la-la");
 
     var spotify = new Spotify({
         id: keys.spotifyKeys.client_ID,
@@ -90,12 +110,69 @@ function spotifyThis() {
 
 //movie-this function
 function movieThis() {
-    console.log("Coming soon!");
+
+    Request(omdbURL, function (error, response, body) {
+        if (error){
+            return console.log("error: " + error);
+        }
+
+        console.log("***************************************************");
+        console.log("Movie Title: " + JSON.parse(body).Title);
+        console.log("Release Year: " + JSON.parse(body).Year);
+        console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+        console.log("Rotten Tomatoes Rating: ");
+        console.log("Country: " + JSON.parse(body).Country);
+        console.log("Language: " + JSON.parse(body).Language);
+        console.log("***************************************************");
+        console.log("Plot: " + JSON.parse(body).Plot);
+        console.log("***************************************************");
+        console.log("Actors: " + JSON.parse(body).Actors);
+    });
 }
 
 //do-what-it-says function
 function doTheThing() {
-    console.log("Zhu Li, do the thing!");
+    fs.readFile("random.txt","utf-8",function(error, data){
+
+        if (error) {
+            return console.log(error);
+        }
+
+        //splits the data received into an array
+        var dataArr = data.split(",");
+        var commandArr = [];
+        var queryArr = [];
+        //sorts random text commands out of random.txt
+        for (var i = 0; i < dataArr.length; i){
+            commandArr.push(dataArr[i]);
+            i += 2;
+        }
+
+        //sorts random text queries out of random.txt
+        for (var i = 1; i < dataArr.length; i){
+            queryArr.push(dataArr[i]);
+            i += 2;
+        }
+
+        //uses a random number to select a command
+        var randomNumber = Math.round(Math.random() * (commandArr.length));
+
+        var randomCommand = commandArr[randomNumber];
+        console.log(randomCommand);
+
+        var randomQuery = queryArr[randomNumber];
+        console.log(randomQuery);
+
+        if (randomCommand === "spotify-this-song"){
+            song = randomQuery;
+            spotifyThis();
+        }
+        else if (randomCommand === "movie-this"){
+            movie = randomQuery;
+            omdbURL = "http://www.omdbapi.com/?apikey=" + keys.omdbKeys.omdb_key + "&t=" + movie;
+            movieThis();
+        }
+    })
 }
 
 

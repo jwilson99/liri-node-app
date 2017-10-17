@@ -12,4 +12,8 @@ var spotifyKeys = {
     client_secret: 'f7469ff74f3c4557898b27bb943fd3de'
 }
 
-module.exports = {twitterKeys, spotifyKeys};
+var omdbKeys = {
+    omdb_key: '40e9cece'
+}
+
+module.exports = {twitterKeys, spotifyKeys, omdbKeys};
